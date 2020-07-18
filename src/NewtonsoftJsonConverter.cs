@@ -1,20 +1,19 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Globalization;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace Boring.Blazor
 {
-    public class DateJsonConverter : JsonConverter<Date>
+    public class NewtonsoftJsonConverter : JsonConverter
     {
-        public override bool CanConvert(Type typeToConvert)
+        public override bool CanConvert(Type objectType)
         {
-            return typeToConvert == typeof(Date);
+            return objectType == typeof(Date);
         }
 
-        public override Date Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            var dateToParse = reader.GetString();
+            var dateToParse = reader.Value.ToString();
 
             if (string.IsNullOrEmpty(dateToParse))
             {
@@ -54,15 +53,17 @@ namespace Boring.Blazor
             throw new JsonException("Invalid date, please use YYYY-MM-DD format");
         }
 
-        public override void Write(Utf8JsonWriter writer, Date value, JsonSerializerOptions options)
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            if (value == Date.MinValue)
+            var date = (Date)value;
+
+            if (date == Date.MinValue)
             {
-                writer.WriteStringValue("");
+                serializer.Serialize(writer, "");
             }
             else
             {
-                writer.WriteStringValue(value.ToIsoString());
+                serializer.Serialize(writer, date.ToIsoString());
             }
         }
     }
