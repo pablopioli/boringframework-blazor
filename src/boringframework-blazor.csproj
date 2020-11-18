@@ -12,7 +12,7 @@
     <Product>The Boring Framework</Product>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/pablopioli/boringframework-blazor</RepositoryUrl>
-    <Version>2.1.0</Version>
+    <Version>2.2.0</Version>
   </PropertyGroup>
 
 
